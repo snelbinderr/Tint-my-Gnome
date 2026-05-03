@@ -20,8 +20,8 @@ export default class TintMyGnomeExtension extends Extension {
       // const oldUserGtk3Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-3.0/gtk.css."))
       // const newUserGtk3Stylesheet = this.addedImport(oldUserGtkStylesheet, tintMyGnomeGtk3Stylesheet.get_path())
       // await this.replaceFileContents(this.userGtk3StylesheetFile,newUserGtk3Stylesheet).catch(this.throwWithMessage("Could not update gtk-3.0/gtk.css."))
-      const oldUserGtk4Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-4.0/gtk.css contents."))
-      const newUserGtk4Stylesheet = this.addedImport(oldUserGtkStylesheet, tintMyGnomeGtk4Stylesheet.get_path())
+      const oldUserGtk4Stylesheet = await this.readFileContents(this.userGtk4StylesheetFile).catch(this.throwWithMessage("Could not get gtk-4.0/gtk.css contents."))
+      const newUserGtk4Stylesheet = this.addImportToContentsForPath(oldUserGtk4Stylesheet, this.tintMyGnomeGtk4Stylesheet.get_path())
       await this.replaceFileContents(this.userGtk4StylesheetFile,newUserGtk4Stylesheet).catch(this.throwWithMessage("Could not update gtk-4.0/gtk.css contents."))
     }
     catch (e) {
@@ -42,8 +42,8 @@ export default class TintMyGnomeExtension extends Extension {
       // const oldUserGtk3Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-3.0/gtk.css."))
       // const newUserGtk3Stylesheet = this.removeTintMyGnomeImport(oldUserGtkStylesheet, tintMyGnomeGtk3Stylesheet.get_path())
       // await this.replaceFileContents(this.userGtk3StylesheetFile,newUserGtk3Stylesheet).catch(this.throwWithMessage("Could not update gtk-3.0/gtk.css."))
-      const oldUserGtk4Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-4.0/gtk.css contents."))
-      const newUserGtk4Stylesheet = this.removeTintMyGnomeImport(oldUserGtkStylesheet, tintMyGnomeGtk4Stylesheet.get_path())
+      const oldUserGtk4Stylesheet = await this.readFileContents(this.userGtk4StylesheetFile).catch(this.throwWithMessage("Could not get gtk-4.0/gtk.css contents."))
+      const newUserGtk4Stylesheet = this.removeTintMyGnomeImportFromContents(oldUserGtk4Stylesheet, tintMyGnomeGtk4Stylesheet.get_path())
       await this.replaceFileContents(this.userGtk4StylesheetFile,newUserGtk4Stylesheet).catch(this.throwWithMessage("Could not update gtk-4.0/gtk.css contents."))
     }
     catch (e) {
@@ -78,16 +78,14 @@ export default class TintMyGnomeExtension extends Extension {
     }
   }
 
-  addTintMyGnomeImport(contents, path) {
-    const removedImport = this.removeTransMyGnomeImport(contents)
+  addImportToContentsForPath(contents, path) {
+    const contentsWithoutImport = this.removeTintMyGnomeImportFromContents(contents)
     const importString = `@import '${path}';\n`;
-    const addedImport = importString + removedImport
-    return addedImport
+    return importString + contentsWithoutImport
   }
 
-  removeTintMyGnomeImport(contents) {
-    const regex = /\W*@import.*?tint-my-gnome@pakovm.*?;\W*/m
-    const removedImport = contents.replace(regex,'')
-    return removedImport
+  removeTintMyGnomeImportFromContents(contents) {
+    const tintMyGnomeImportRegex = /\W*@import.*?tint-my-gnome@pakovm.*?;\W*/
+    return contents.replace(tintMyGnomeImportRegex,'')
   }
 }

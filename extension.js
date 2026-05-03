@@ -6,20 +6,20 @@ Gio._promisify(Gio.File.prototype, 'load_contents_async');
 Gio._promisify(Gio.File.prototype, 'replace_contents_bytes_async', 'replace_contents_finish');
 
 export default class TintMyGnomeExtension extends Extension {
-  gtk3ConfigDirectory = Gio.File.new_for_path(GLib.build_filenamev([GLib.get_user_config_dir(), 'gtk-3.0']));
-  userGtk3StylesheetFile = this.gtk3ConfigDirectory.get_child('gtk.css');
+  // gtk3ConfigDirectory = Gio.File.new_for_path(GLib.build_filenamev([GLib.get_user_config_dir(), 'gtk-3.0']));
+  // userGtk3StylesheetFile = this.gtk3ConfigDirectory.get_child('gtk.css');
+  // tintMyGnomeGtk3Stylesheet = this.dir.get_child('gtk-3.0').get_child('gtk.css');
   gtk4ConfigDirectory = Gio.File.new_for_path(GLib.build_filenamev([GLib.get_user_config_dir(), 'gtk-4.0']));
   userGtk4StylesheetFile = this.gtk4ConfigDirectory.get_child('gtk.css');
-  tintMyGnomeGtk3Stylesheet = this.dir.get_child('gtk-3.0').get_child('gtk.css');
   tintMyGnomeGtk4Stylesheet = this.dir.get_child('gtk-4.0').get_child('gtk.css');
 
   async enable() {
     try {
       this.setupGtkFolders()
 
-      const oldUserGtk3Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-3.0/gtk.css."))
-      const newUserGtk3Stylesheet = this.addedImport(oldUserGtkStylesheet, tintMyGnomeGtk3Stylesheet.get_path())
-      await this.replaceFileContents(this.userGtk3StylesheetFile,newUserGtk3Stylesheet).catch(this.throwWithMessage("Could not update gtk-3.0/gtk.css."))
+      // const oldUserGtk3Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-3.0/gtk.css."))
+      // const newUserGtk3Stylesheet = this.addedImport(oldUserGtkStylesheet, tintMyGnomeGtk3Stylesheet.get_path())
+      // await this.replaceFileContents(this.userGtk3StylesheetFile,newUserGtk3Stylesheet).catch(this.throwWithMessage("Could not update gtk-3.0/gtk.css."))
       const oldUserGtk4Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-4.0/gtk.css contents."))
       const newUserGtk4Stylesheet = this.addedImport(oldUserGtkStylesheet, tintMyGnomeGtk4Stylesheet.get_path())
       await this.replaceFileContents(this.userGtk4StylesheetFile,newUserGtk4Stylesheet).catch(this.throwWithMessage("Could not update gtk-4.0/gtk.css contents."))
@@ -39,9 +39,9 @@ export default class TintMyGnomeExtension extends Extension {
 
   async disable() {
     try {
-      const oldUserGtk3Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-3.0/gtk.css."))
-      const newUserGtk3Stylesheet = this.removeTintMyGnomeImport(oldUserGtkStylesheet, tintMyGnomeGtk3Stylesheet.get_path())
-      await this.replaceFileContents(this.userGtk3StylesheetFile,newUserGtk3Stylesheet).catch(this.throwWithMessage("Could not update gtk-3.0/gtk.css."))
+      // const oldUserGtk3Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-3.0/gtk.css."))
+      // const newUserGtk3Stylesheet = this.removeTintMyGnomeImport(oldUserGtkStylesheet, tintMyGnomeGtk3Stylesheet.get_path())
+      // await this.replaceFileContents(this.userGtk3StylesheetFile,newUserGtk3Stylesheet).catch(this.throwWithMessage("Could not update gtk-3.0/gtk.css."))
       const oldUserGtk4Stylesheet = await this.readFileContents(this.userGtkStylesheetFile).catch(this.throwWithMessage("Could not get gtk-4.0/gtk.css contents."))
       const newUserGtk4Stylesheet = this.removeTintMyGnomeImport(oldUserGtkStylesheet, tintMyGnomeGtk4Stylesheet.get_path())
       await this.replaceFileContents(this.userGtk4StylesheetFile,newUserGtk4Stylesheet).catch(this.throwWithMessage("Could not update gtk-4.0/gtk.css contents."))
@@ -52,9 +52,9 @@ export default class TintMyGnomeExtension extends Extension {
   }
 
   setupGtkFolders() {
-    if (!this.gtk3ConfigDirectory.query_exists(null)) {
-        this.gtk3ConfigDirectory.make_directory_with_parents(null);
-    }
+    // if (!this.gtk3ConfigDirectory.query_exists(null)) {
+    //     this.gtk3ConfigDirectory.make_directory_with_parents(null);
+    // }
     if (!this.gtk4ConfigDirectory.query_exists(null)) {
         this.gtk4ConfigDirectory.make_directory_with_parents(null);
     }
@@ -75,12 +75,6 @@ export default class TintMyGnomeExtension extends Extension {
 
     } catch (e) {
       this.throwWithMessage(`Failed to replace contents of file '${file.get_path()}'.`)(e)
-    }
-  }
-
-  async setupGtkFolders() {
-    if (!this.gtk4ConfigDirectory.query_exists(null)) {
-        this.gtk4ConfigDirectory.make_directory_with_parents(null);
     }
   }
 

@@ -34,7 +34,7 @@ export default class TintMyGnomeExtension extends Extension {
   async disable() {
     try {
       const oldUserGtk4Stylesheet = await this.readFileContents(this.userGtk4StylesheetFile).catch(this.throwWithMessage("Could not get gtk-4.0/gtk.css contents."))
-      const newUserGtk4Stylesheet = this.removeTintMyGnomeImportFromContents(oldUserGtk4Stylesheet, tintMyGnomeGtk4Stylesheet.get_path())
+      const newUserGtk4Stylesheet = this.removeTintMyGnomeImportFromContents(oldUserGtk4Stylesheet, this.tintMyGnomeGtk4Stylesheet.get_path())
       await this.replaceFileContents(this.userGtk4StylesheetFile,newUserGtk4Stylesheet).catch(this.throwWithMessage("Could not update gtk-4.0/gtk.css contents."))
     }
     catch (e) {

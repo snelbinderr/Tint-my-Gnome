@@ -73,7 +73,6 @@ export default class TintMyGnomeExtension extends Extension {
   }
 
   removeTintMyGnomeImportFromContents(contents) {
-    const tintMyGnomeImportRegex = /@import.*?tint-my-gnome@pakovm.*?;\s*/
-    return contents.replace(tintMyGnomeImportRegex,'')
+    return contents.split('\n').filter(e=>!e.includes('tint-my-gnome@pakovm')).join('\n')
   }
 }
